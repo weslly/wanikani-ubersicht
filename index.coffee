@@ -1,7 +1,7 @@
 options =
   api_key: "replace this text with your Wanikani API key"
 
-refreshFrequency: 60000*10   # Update every 10 minutes
+refreshFrequency: 60000*15   # Update every 15 minutes
 
 style: """
   bottom: 15px
@@ -43,12 +43,10 @@ style: """
     text-overflow: ellipsis
     text-shadow: none
 
-  .pid
-    position: absolute
-    top: 2px
-    right: 2px
-    font-size: 10px
-    font-weight: normal
+  .col1
+    background: rgba(255, 255, 255, 0.1)
+    span
+      font-size: 22px
 
 """
 
@@ -108,35 +106,32 @@ update: (output, domEl) ->
     $(domEl).html("Invalid or missing API key")
     return 0
 
-  if ri.next_review_date >= Math.floor(Date.now() / 1000)
-    $.getScript './wanikani.widget/jquery.timeago.js.lib', ->
-      ts = $.timeago.settings
-      tss = ts.strings
+  $.getScript './wanikani.widget/jquery.timeago.js.lib', ->
+    ts = $.timeago.settings
+    tss = ts.strings
 
-      ts.allowFuture = true
-      tss.prefixAgo = null
-      tss.prefixFromNow = null
-      tss.suffixAgo = "ago"
-      tss.suffixFromNow = ""
-      tss.seconds = "< 1 minute"
-      tss.minute = "1 minute"
-      tss.minutes = "%d minutes"
-      tss.hour = "~1 hour"
-      tss.hours = "~%d hours"
-      tss.day = "a day"
-      tss.days = "%d days"
-      tss.month = "~1 month"
-      tss.months = "%d months"
-      tss.year = "~1 year"
-      tss.years = "%d years"
+    ts.allowFuture = true
+    ts.allowPast = false
+    tss.inPast = "Now";
+    tss.prefixAgo = null
+    tss.prefixFromNow = null
+    tss.suffixAgo = "ago"
+    tss.suffixFromNow = ""
+    tss.seconds = "< 1 minute"
+    tss.minute = "1 minute"
+    tss.minutes = "%d minutes"
+    tss.hour = "~1 hour"
+    tss.hours = "~%d hours"
+    tss.day = "a day"
+    tss.days = "%d days"
+    tss.month = "~1 month"
+    tss.months = "%d months"
+    tss.year = "~1 year"
+    tss.years = "%d years"
 
-      $(domEl).find('.col1 span').text($.timeago(ri.next_review_date * 1000))
-      $(domEl).find('.col1').css('background', 'rgba(255, 255, 255, 0.1)')
-
-  else
-    $(domEl).find('.col1 span').text('Now').css('font-weight', '400')
-    $(domEl).find('.col1').css('background', 'rgba(255, 255, 255, 0.2)')
-
+    next_review = new Date(ri.next_review_date * 1000).toISOString()
+    $(domEl).find('.col1 span').attr('title', next_review)
+    $(domEl).find('.col1 span').timeago()
 
   $(domEl).find('.col2 span').text(ri.reviews_available_next_hour)
   $(domEl).find('.col3 span').text(ri.reviews_available_next_day)
