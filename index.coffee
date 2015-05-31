@@ -52,7 +52,7 @@ style: """
 
 """
 
-command: "/usr/bin/curl --silent https://www.wanikani.com/api/user/#{options.api_key}/study-queue"
+command: "curl --silent https://www.wanikani.com/api/user/#{options.api_key}/study-queue"
 
 render: (_) -> """
 <table>
