@@ -1,5 +1,5 @@
 options =
-  api_key: ""
+  api_key: "replace this text with your Wanikani API key"
 
 refreshFrequency: 60000*10   # Update every 10 minutes
 
