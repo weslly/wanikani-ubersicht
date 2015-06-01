@@ -1,7 +1,7 @@
 options =
   api_key: "replace this text with your Wanikani API key"
 
-refreshFrequency: 60000*15   # Update every 15 minutes
+refreshFrequency: 60000 * 15   # Update every 15 minutes
 
 style: """
   bottom: 15px
@@ -106,6 +106,17 @@ update: (output, domEl) ->
     $(domEl).html("Invalid or missing API key")
     return 0
 
+  next_review = new Date(ri.next_review_date * 1000).toISOString()
+  $(domEl).find('.col1 span').remove()
+  $(domEl).find('.col1 .wrapper').prepend('<span></span>')
+  $(domEl).find('.col1 span').attr('title', next_review)
+
+  $(domEl).find('.col2 span').text(ri.reviews_available_next_hour)
+  $(domEl).find('.col3 span').text(ri.reviews_available_next_day)
+  $(domEl).find('.col4 span').text(ui.level)
+  $(domEl).find('.col5 span').text(ri.lessons_available)
+  $(domEl).find('.col6 span').text(ri.reviews_available)
+
   $.getScript './wanikani.widget/jquery.timeago.js.lib', ->
     ts = $.timeago.settings
     tss = ts.strings
@@ -129,12 +140,5 @@ update: (output, domEl) ->
     tss.year = "~1 year"
     tss.years = "%d years"
 
-    next_review = new Date(ri.next_review_date * 1000).toISOString()
-    $(domEl).find('.col1 span').attr('title', next_review)
     $(domEl).find('.col1 span').timeago()
 
-  $(domEl).find('.col2 span').text(ri.reviews_available_next_hour)
-  $(domEl).find('.col3 span').text(ri.reviews_available_next_day)
-  $(domEl).find('.col4 span').text(ui.level)
-  $(domEl).find('.col5 span').text(ri.lessons_available)
-  $(domEl).find('.col6 span').text(ri.reviews_available)
