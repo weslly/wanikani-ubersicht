@@ -9,6 +9,9 @@ style: """
   color: #fff
   font-family: Helvetica Neue
 
+  .error
+    background: red
+
   table
     border-collapse: collapse
     table-layout: fixed
@@ -17,8 +20,8 @@ style: """
       content: 'Wanikani'
       position: absolute
       left: 0
-      top: -24px
-      font-size: 16px
+      top: -22px
+      font-size: 14px
 
   td
     border: 1px solid #fff
@@ -28,6 +31,7 @@ style: """
     max-width: 120px
     overflow: hidden
     text-shadow: 0 0 1px rgba(#000, 0.5)
+    text-align: center
 
   .wrapper
     padding: 4px 6px 4px 6px
@@ -44,7 +48,6 @@ style: """
     text-shadow: none
 
   .col1
-    background: rgba(255, 255, 255, 0.1)
     span
       font-size: 22px
 
@@ -53,6 +56,7 @@ style: """
 command: "curl --silent https://www.wanikani.com/api/user/#{options.api_key}/study-queue"
 
 render: (_) -> """
+<div class="error"></div>
 <table>
   <tr>
     <td class='col1'>
@@ -98,7 +102,13 @@ render: (_) -> """
 """
 
 update: (output, domEl) ->
-  data = JSON.parse(output)
+  $(domEl).find('.error').hide()
+  try
+    data = JSON.parse(output)
+  catch e
+    $(domEl).find('.error').html('Connection error.').show()
+    return 0
+
   ui = data.user_information
   ri = data.requested_information
 
