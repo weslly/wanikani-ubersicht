@@ -1,10 +1,10 @@
 options =
   api_key: "replace this text with your Wanikani API key"
 
-refreshFrequency: 60000 * 15   # Update every 15 minutes
+refreshFrequency: 60000 * 10   # Update every 10 minutes
 
 style: """
-  bottom: 15px
+  bottom: 45px
   right: 15px
   color: #fff
   font-family: Helvetica Neue
